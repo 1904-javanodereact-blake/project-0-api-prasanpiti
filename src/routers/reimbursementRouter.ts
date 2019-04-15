@@ -25,7 +25,6 @@ reimbursementRouter.get('/author/userId/:userId', [
 reimbursementRouter.post('', 
     async (req, res) => {
         const {author_id, amount, date_submitted, description, status_id} = req.body;
-
         const resReimbursement = await insertReimbursement(author_id, amount, date_submitted, description, status_id);
         res.status(201);
         res.send(resReimbursement);

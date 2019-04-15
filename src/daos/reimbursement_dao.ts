@@ -1,5 +1,6 @@
 import { PoolClient } from 'pg';
 import { connectionPool } from '.';
+import { convertSqlReimbursement } from '../util/sql-reimbursement-converter';
 
 export async function findReimbursementByStatus(statusId: number){
     let client: PoolClient;
@@ -7,8 +8,14 @@ export async function findReimbursementByStatus(statusId: number){
         client = await connectionPool.connect();
         const queryString =  `SELECT * FROM ers_schema.reimbursement WHERE status_id = $1`;
         const result = await client.query(queryString, [statusId]);
-        if(result){
-            return result;
+        const reimbursements = result.rows;
+        let convertedReimbursements = [];
+        if(reimbursements){
+            for(let reimbursement of reimbursements){
+                const convertedReimbursement = convertSqlReimbursement(reimbursement);
+                convertedReimbursements.push(convertedReimbursement);
+            }
+            return convertedReimbursements;
         }
     } catch(err) {
         console.log(err);
@@ -25,8 +32,14 @@ export async function findReimbursementByUserId(authorId: number){
         client = await connectionPool.connect();
         const queryString =  `SELECT * FROM ers_schema.reimbursement WHERE author_id = $1`;
         const result = await client.query(queryString, [authorId]);
-        if(result){
-            return result;
+        const reimbursements = result.rows;
+        let convertedReimbursements = [];
+        if(reimbursements){
+            for(let reimbursement of reimbursements){
+                const convertedReimbursement = convertSqlReimbursement(reimbursement);
+                convertedReimbursements.push(convertedReimbursement);
+            }
+            return convertedReimbursements;
         }
     } catch(err) {
         console.log(err);
@@ -41,16 +54,12 @@ export async function insertReimbursement(author_id, amount, date_submitted, des
     try {
         client = await connectionPool.connect();
         const queryString =  `INSERT INTO ers_schema.reimbursement (author_id, amount, date_submitted, description, status_id)
-         VALUES ($1, $2, $3, $4, $5)`;
+         VALUES ($1, $2, $3, $4, $5) RETURNING *`;
         const r = await client.query( queryString, [author_id, amount, date_submitted, description, status_id]);
-        console.log(`rId = ${r}`);
         if(r){
-            console.log('you are in if rId');
-            const queryString1 = `SELECT * FROM ers_schema.reimbursement WHERE reimbursement_id IN 
-                (SELECT MAX(reimbursement_id) FROM ers_schema.reimbursement)`;
-            const result = await client.query(queryString1);
-            
-            return result;
+            const result = r.rows[0];
+            const convertedResult = convertSqlReimbursement(result);
+            return convertedResult;
         }
     } catch(err) {
         console.log(err);
@@ -67,12 +76,11 @@ export async function approveReimbursement(reimbursement_id, date_resolved, reso
         const queryString =  `UPDATE ers_schema.reimbursement SET 
             date_resolved = $1, resolver_id = $2, status_id = $3 WHERE reimbursement_id = $4`;
         const r = await client.query( queryString, [date_resolved, resolver_id, status_id, reimbursement_id]);
-        console.log(`rId = ${r}`);
         if(r){
-            console.log('you are in if r');
             const queryString1 = `SELECT * FROM ers_schema.reimbursement WHERE reimbursement_id = $1`;
             const result = await client.query(queryString1, [reimbursement_id]);
-            return result;
+            const convertedResult = convertSqlReimbursement(result.rows[0]);
+            return convertedResult;
         }
     } catch(err) {
         console.log(err);

@@ -3,6 +3,7 @@ import { authMiddleware, authMiddlewareId } from '../middleware/auth.middleware'
 import { findAllUsers } from '../daos/user-dao';
 import { findUserById } from '../daos/user-dao';
 import { patchUser } from '../daos/user-dao';
+
 export const userRouter = express.Router();
 
 userRouter.get('', [
