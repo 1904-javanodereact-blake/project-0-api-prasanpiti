@@ -10,7 +10,7 @@ userRouter.get('', [
     authMiddleware(['admin', 'finance_manager']), async (req, res) => {
         console.log('Retreiving all users');
         const users = await findAllUsers();
-        res.send(users);
+        res.json(users);
     }
 ]);
 
@@ -18,7 +18,7 @@ userRouter.get('/:id', [
     authMiddlewareId(['admin', 'finance_manager']), async (req, res) => {
         console.log('Retreive a user');
         const user = await findUserById(req.params.id);
-        res.send(user);
+        res.json(user);
     }
 ]);
 
@@ -29,6 +29,6 @@ userRouter.patch('', [
         const roleId = role.roleId;
         const role1 = role.role;
         const user = await patchUser(userId, username, password, firstName, lastName, email, roleId, role1);
-        res.send(user);
+        res.json(user);
     }
 ])

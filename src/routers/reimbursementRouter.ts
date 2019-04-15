@@ -11,14 +11,14 @@ export const reimbursementRouter = express.Router();
 reimbursementRouter.get('/status/:statusId', [
     authMiddleware(['admin', 'finance_manager']), async (req, res) => {
         const reimbursements = await findReimbursementByStatus(req.params.statusId);
-        res.send(reimbursements);
+        res.json(reimbursements);
     }
 ]);
 
 reimbursementRouter.get('/author/userId/:userId', [
     authMiddlewareId(['admin', 'finance_manager']), async (req, res) => {
         const reimbursements = await findReimbursementByUserId(req.params.userId);
-        res.send(reimbursements);
+        res.json(reimbursements);
     }
 ]);
 
@@ -27,7 +27,7 @@ reimbursementRouter.post('',
         const {author_id, amount, date_submitted, description, status_id} = req.body;
         const resReimbursement = await insertReimbursement(author_id, amount, date_submitted, description, status_id);
         res.status(201);
-        res.send(resReimbursement);
+        res.json(resReimbursement);
     }
 );
 
@@ -35,6 +35,6 @@ reimbursementRouter.patch('', [
     authMiddleware(['admin', 'finance_manager']), async (req, res) => {
         const {reimbursement_id, date_resolved, resolver_id, status_id} = req.body;
         const resReimbursement = await approveReimbursement(reimbursement_id, date_resolved, resolver_id, status_id);
-        res.send(resReimbursement);
+        res.json(resReimbursement);
     }
 ]);
