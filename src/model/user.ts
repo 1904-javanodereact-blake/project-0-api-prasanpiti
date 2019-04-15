@@ -1,4 +1,4 @@
-import { ResolveOptions } from "dns";
+import { Role } from "./role";
 
 export class User {
     userId: number;
@@ -8,7 +8,7 @@ export class User {
     lastName: string;
     email: string;
     role: Role;
-    constructor(userId = 0, username = '', password = '', firstName = '', lastName = '', email = '', role: Role){
+    constructor(userId = 0, username = '', password = '', firstName = '', lastName = '', email = '', role = undefined){
         this.userId = userId;
         this.username = username;
         this.password = password;
@@ -19,11 +19,3 @@ export class User {
     }
 }
 
-export class Role {
-    roleId: number;
-    role: string;
-    constructor(roleId: number, role: string){
-        this.roleId = roleId;
-        this.role = role;
-    }
-}
