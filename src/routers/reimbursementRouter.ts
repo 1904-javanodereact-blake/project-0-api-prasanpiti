@@ -24,8 +24,8 @@ reimbursementRouter.get('/author/userId/:userId', [
 
 reimbursementRouter.post('', 
     async (req, res) => {
-        const {author_id, amount, date_submitted, description, status_id} = req.body;
-        const resReimbursement = await insertReimbursement(author_id, amount, date_submitted, description, status_id);
+        const {author, amount, dateSubmitted, description, status} = req.body;
+        const resReimbursement = await insertReimbursement(author, amount, dateSubmitted, description, status);
         res.status(201);
         res.json(resReimbursement);
     }
@@ -33,8 +33,8 @@ reimbursementRouter.post('',
 
 reimbursementRouter.patch('', [
     authMiddleware(['admin', 'finance_manager']), async (req, res) => {
-        const {reimbursement_id, date_resolved, resolver_id, status_id} = req.body;
-        const resReimbursement = await approveReimbursement(reimbursement_id, date_resolved, resolver_id, status_id);
+        const {reimbursementId, dateResolved, resolver, status} = req.body;
+        const resReimbursement = await approveReimbursement(reimbursementId, dateResolved, resolver, status);
         res.json(resReimbursement);
     }
 ]);
