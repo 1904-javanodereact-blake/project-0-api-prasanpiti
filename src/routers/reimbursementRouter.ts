@@ -1,6 +1,6 @@
 import express from 'express';
 import { authMiddleware } from '../middleware/auth.middleware';
-import { authMiddlewareId } from '../middleware/auth.middleware';
+import { authMiddlewareUserId } from '../middleware/auth.middleware';
 import { findReimbursementByStatus } from '../daos/reimbursement_dao';
 import { findReimbursementByUserId } from '../daos/reimbursement_dao';
 import { insertReimbursement } from '../daos/reimbursement_dao';
@@ -16,7 +16,7 @@ reimbursementRouter.get('/status/:statusId', [
 ]);
 
 reimbursementRouter.get('/author/userId/:userId', [
-    authMiddlewareId(['admin', 'finance_manager']), async (req, res) => {
+    authMiddlewareUserId(['admin', 'finance_manager']), async (req, res) => {
         const reimbursements = await findReimbursementByUserId(req.params.userId);
         res.json(reimbursements);
     }
