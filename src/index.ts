@@ -7,7 +7,7 @@ import { reimbursementRouter } from './routers/reimbursementRouter';
 
 const app = express();
 
-let port = process.env['SHIP_PORT'] || 8080;
+let port = process.env.SHIP_PORT || 8080;
 
 //logging middleware
 app.use((req, res, next) => {
