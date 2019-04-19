@@ -7,6 +7,8 @@ import { reimbursementRouter } from './routers/reimbursementRouter';
 
 const app = express();
 
+let port = process.env['SHIP_PORT'] || 8080;
+
 //logging middleware
 app.use((req, res, next) => {
     console.log(`request url = ${req.url} with method = ${req.method}`);
@@ -37,6 +39,6 @@ app.use((req, res) => {
 });
 
 //start listening to port 8080
-app.listen(8080, () => {
+app.listen(port, () => {
     console.log('Listening on port 8080');
 });
