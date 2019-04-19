@@ -38,7 +38,7 @@ app.use((req, res) => {
     res.sendStatus(404);
 });
 
-//start listening to port 8080
+//start listening to port
 app.listen(port, () => {
-    console.log('Listening on port 8080');
+    console.log(`Listening on port ${port}`);
 });
